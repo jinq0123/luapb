@@ -1,4 +1,3 @@
-require("luapb");
 
 --package lm;
 --message test
@@ -27,8 +26,8 @@ print("param1: " .. msg.param1);
 
 
 for i = 1, msg.param2:len() do
-	local value = msg.param2:get(i);
-	print("i: " .. i .. " value: " .. value); 
+    local value = msg.param2:get(i);
+    print("i: " .. i .. " value: " .. value); 
 end
 
 msg.param2[1] = "test"
@@ -40,3 +39,5 @@ print("===== param2: " .. msg.param2:get(2))
 
 print("str: " .. pb.tostring(msg));
 
+local sz = pb.serializeToString(msg)
+send_message(sz, #sz)

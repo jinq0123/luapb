@@ -1,0 +1,9 @@
+package lm;
+message test
+{
+	required int32 uid = 1;
+	required int32 param = 2;
+	optional string param1 = 3;
+	repeated string param2 = 4;
+};
+

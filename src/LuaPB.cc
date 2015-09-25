@@ -1,7 +1,6 @@
-
 #include "LuaPB.h"
 #include "ProtoImporter.h"
-
+#include <lua.hpp>
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/descriptor_database.h>
 #include <google/protobuf/message.h>
@@ -275,14 +274,14 @@ static int pb_repeated_set(lua_State* L)
 static int pb_import(lua_State* L)
 {
 	const char* filename = luaL_checkstring(L, 1);
-	sProtoImporter.Import(filename);
+	ProtoImporter::instance().Import(filename);
 	return 0;
 }
 
 static int pb_new(lua_State* L)
 {
 	const char* type_name = luaL_checkstring(L, 1);
-	Message* message = sProtoImporter.createDynamicMessage(type_name);
+	Message* message = ProtoImporter::instance().createDynamicMessage(type_name);
 	if (!message)
 	{
 		fprintf(stderr, "pb_new error, result is typename(%s) not found!\n", type_name);
@@ -346,7 +345,7 @@ static int pb_get(lua_State* L)
 	}
     else if (field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
     {
-        lua_pushnumber(L, reflection->GetInt64(*message, field));
+        lua_pushinteger(L, reflection->GetInt64(*message, field));
     }
 	else if(field->type() == google::protobuf::FieldDescriptor::TYPE_UINT32)
 	{
@@ -354,7 +353,7 @@ static int pb_get(lua_State* L)
 	}
     else if (field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
     {
-        lua_pushnumber(L, reflection->GetUInt64(*message, field));
+        lua_pushinteger(L, reflection->GetUInt64(*message, field));
     }
 	else if(field->type() == google::protobuf::FieldDescriptor::TYPE_FLOAT)
 	{
@@ -483,49 +482,44 @@ static int pb_serializeToString(lua_State* L)
 	return 1;
 }
 
-static const struct luaL_reg lib[] =
+static const struct luaL_Reg lib[] =
 {
 	{"new", pb_new},
 	{"import", pb_import},
 	{"tostring", pb_tostring},
 	{"parseFromString", pb_parseFromString},
 	{"serializeToString", pb_serializeToString},
-	{NULL, NULL}
+	{NULL, NULL},
 };
 
-static const struct luaL_reg libm[] =
+static const struct luaL_Reg libm[] =
 {
 	{"__index", pb_get},
 	{"__newindex", pb_set},
 	{"__gc", pb_delete},
-	{NULL, NULL}
+	{NULL, NULL},
 };
 
-static const struct luaL_reg repeatedlib[] = {
+static const struct luaL_Reg repeatedlib[] = {
 	{"add", pb_repeated_add},
 	{"len", pb_repeated_len},
 	{"get", pb_repeated_get},
 	{"set", pb_repeated_set},
+    {"__newindex", pb_repeated_set},
 	{NULL, NULL},
 };
 
-int luaopen_luapb(lua_State* L)
+int luaopen_pb(lua_State* L)
 {
 	luaL_newmetatable(L, PB_REPEATED_MESSAGE_META); 
-	luaL_register(L, NULL, repeatedlib);
-
-	lua_pushstring(L, "__index");
-	lua_pushvalue(L, -2);
-	lua_settable(L, -3);
-
-	lua_pushstring(L, "__newindex");
-	lua_pushcfunction(L, pb_repeated_set);
-	lua_settable(L, -3);
+	lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+    luaL_setfuncs(L, repeatedlib, 0);
 
 	luaL_newmetatable(L, PB_MESSAGE_META);
-	luaL_register(L, NULL, libm);
+    luaL_setfuncs(L, libm, 0);
 
-	luaL_register(L, PB_MESSAGE, lib);
+    luaL_newlib(L, lib);
 	return 1;
 }
 

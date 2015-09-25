@@ -1,7 +1,4 @@
-
 #include "ProtoImporter.h"
-
-#include <stdio.h>
 
 class MyMultiFileErrorCollector : public google::protobuf::compiler::MultiFileErrorCollector
 {
@@ -11,7 +8,7 @@ class MyMultiFileErrorCollector : public google::protobuf::compiler::MultiFileEr
                 int column,
                 const std::string & message)
         {
-        	fprintf(stderr, "%s:%d:%d:%s\n", filename.c_str(), line, column, message.c_str());
+        	fprintf(stderr, "[ProtoImporter]%s:%d:%d:%s\n", filename.c_str(), line, column, message.c_str());
        }
 };
 
@@ -30,7 +27,7 @@ ProtoImporter::ProtoImporter():
 	{
 		sourceTree.MapPath("", protopath);
 	}
-	printf("[ProtoImporter] protopath:%s\n", protopath);
+	//printf("[ProtoImporter] protopath:%s\n", protopath);
 }
 
 bool ProtoImporter::Import(const std::string& filename)
@@ -38,7 +35,7 @@ bool ProtoImporter::Import(const std::string& filename)
 	const  google::protobuf::FileDescriptor* filedescriptor = importer.Import(filename);
 	 if (!filedescriptor)
 	 {
-		 fprintf(stderr, "import (%s) file descriptor error\n", filename.c_str());
+		 fprintf(stderr,"import (%s) file descriptor error\n", filename.c_str());
 		 return false;
 	 }
 	 return true;

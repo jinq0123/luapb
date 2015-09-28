@@ -78,17 +78,17 @@ static int pb_repeated_add(lua_State* L)
     }
     else if (field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
     {
-        long val = static_cast<long>(luaL_checknumber(L, 2));
+        int64_t val = static_cast<int64_t>(luaL_checkinteger(L, 2));
         reflection->AddInt64(message, field, val);
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_UINT32)
     {
-        unsigned int val = static_cast<unsigned int>(luaL_checknumber(L, 2));
+        unsigned int val = static_cast<unsigned int>(luaL_checkinteger(L, 2));
         reflection->AddUInt32(message, field, val);
     }
     else if (field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
     {
-        unsigned long val = static_cast<unsigned long>(luaL_checknumber(L, 2));
+        uint64_t val = static_cast<uint64_t>(luaL_checkinteger(L, 2));
         reflection->AddUInt64(message, field, val);
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_FLOAT)
@@ -199,6 +199,14 @@ static int pb_repeated_get(lua_State* L)
 		Message* msg = reflection->MutableRepeatedMessage(message, field, index);
 		return push_message(L, msg, false);
 	}
+    else if (field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
+    {
+		lua_pushinteger(L, reflection->GetRepeatedUInt64(*message, field, index));
+    }
+    else if (field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
+    {
+		lua_pushinteger(L, reflection->GetRepeatedInt64(*message, field, index));
+    }
 	else
 	{
 		luaL_argerror(L, 0, "pb_repeated_get, field type for get not support!!!");
@@ -263,6 +271,16 @@ static int pb_repeated_set(lua_State* L)
 		const char *str = static_cast<const char *>(luaL_checklstring(L, 3, &strlen));
 		reflection->SetRepeatedString(message, field, index, str);
 	}
+    else if (field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
+    {
+        int64_t val = static_cast<int64_t>(luaL_checkinteger(L, 3));
+        reflection->SetRepeatedInt64(message, field, index, val);
+    }
+    else if (field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
+    {
+        uint64_t val = static_cast<uint64_t>(luaL_checkinteger(L, 3));
+        reflection->SetRepeatedUInt64(message, field, index, val);
+    }
 	else
 	{
 		luaL_argerror(L, (2), "pb_repeated_set type for set not support!!!");
@@ -423,7 +441,7 @@ static int pb_set(lua_State* L)
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
     {
-        long val = static_cast<long>(luaL_checknumber(L, 3));
+        int64_t val = static_cast<int64_t>(luaL_checknumber(L, 3));
         reflection->SetInt64(message, field, val);
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_UINT32)
@@ -433,7 +451,7 @@ static int pb_set(lua_State* L)
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
     {
-        unsigned long val = static_cast<unsigned long>(luaL_checknumber(L, 3));
+        uint64_t val = static_cast<uint64_t>(luaL_checkinteger(L, 3));
         reflection->SetUInt64(message, field, val);
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_FLOAT)

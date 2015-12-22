@@ -36,8 +36,8 @@ print("===== param2: " .. msg.param2:get(1))
 msg.param2:set(2, "test2")
 print("===== param2: " .. msg.param2:get(2))
 
-
-print("str: " .. pb.tostring(msg));
-
 local sz = pb.serializeToString(msg)
-send_message(sz, #sz)
+print("sz size is ".. #sz)
+
+local enum_value = pb.getEnumValue("Cmd.CMD_TYPE_USER")
+print(enum_value)

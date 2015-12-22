@@ -55,3 +55,15 @@ google::protobuf::Message* ProtoImporter::createDynamicMessage(const std::string
 	  }
 	  return message;
 }
+
+int ProtoImporter::getEnumValue(const char * enumtype)
+{
+    const google::protobuf::EnumValueDescriptor * desc = importer.pool()->FindEnumValueByName(enumtype);
+    if(desc)
+    {
+        return desc->number();
+    }
+    return 0;
+}
+
+

@@ -500,6 +500,14 @@ static int pb_serializeToString(lua_State* L)
 	return 1;
 }
 
+static int pb_getEnum(lua_State* L)
+{
+    const char * name = luaL_checkstring(L, 1);
+    int rc = ProtoImporter::instance().getEnumValue(name);
+    lua_pushinteger(L, rc);
+    return 1;
+}
+
 static const struct luaL_Reg lib[] =
 {
 	{"new", pb_new},
@@ -507,6 +515,7 @@ static const struct luaL_Reg lib[] =
 	{"tostring", pb_tostring},
 	{"parseFromString", pb_parseFromString},
 	{"serializeToString", pb_serializeToString},
+    {"getEnumValue", pb_getEnum},
 	{NULL, NULL},
 };
 

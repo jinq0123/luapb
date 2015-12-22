@@ -1,4 +1,8 @@
 package lm;
+enum Cmd
+{
+    CMD_TYPE_USER = 1;
+}
 message test
 {
 	required int32 uid = 1;

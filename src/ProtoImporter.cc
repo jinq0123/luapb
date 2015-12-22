@@ -56,12 +56,14 @@ google::protobuf::Message* ProtoImporter::createDynamicMessage(const std::string
 	  return message;
 }
 
-int ProtoImporter::getEnumValue(const char * enumtype)
+int ProtoImporter::getEnumValue(const char * enumtype, const char * enumfield)
 {
-    const google::protobuf::EnumValueDescriptor * desc = importer.pool()->FindEnumValueByName(enumtype);
+    const google::protobuf::EnumDescriptor * desc = importer.pool()->FindEnumTypeByName(enumtype);
     if(desc)
     {
-        return desc->number();
+       const google::protobuf::EnumValueDescriptor * value_desc = desc->FindValueByName(enumfield);
+       if(value_desc)
+        return value_desc->number();
     }
     return 0;
 }

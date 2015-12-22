@@ -39,5 +39,5 @@ print("===== param2: " .. msg.param2:get(2))
 local sz = pb.serializeToString(msg)
 print("sz size is ".. #sz)
 
-local enum_value = pb.getEnumValue("Cmd.CMD_TYPE_USER")
+local enum_value = pb.getEnumValue("lm.Cmd", "CMD_TYPE_USER")
 print(enum_value)

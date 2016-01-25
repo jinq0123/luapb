@@ -207,6 +207,10 @@ static int pb_repeated_get(lua_State* L)
     {
 		lua_pushinteger(L, reflection->GetRepeatedInt64(*message, field, index));
     }
+    else if(field->type() == google::protobuf::FieldDescriptor::TYPE_ENUM)
+	{
+		lua_pushinteger(L, reflection->GetRepeatedEnumValue(*message, field, index));
+	}
 	else
 	{
 		luaL_argerror(L, 0, "pb_repeated_get, field type for get not support!!!");
@@ -281,6 +285,11 @@ static int pb_repeated_set(lua_State* L)
         uint64_t val = static_cast<uint64_t>(luaL_checkinteger(L, 3));
         reflection->SetRepeatedUInt64(message, field, index, val);
     }
+    else if(field->type() == google::protobuf::FieldDescriptor::TYPE_ENUM)
+	{
+        int32_t val = static_cast<int32_t>(luaL_checkinteger(L, 3));
+        reflection->SetRepeatedEnumValue(message, field, index, val);
+	}
 	else
 	{
 		luaL_argerror(L, (2), "pb_repeated_set type for set not support!!!");
@@ -395,6 +404,10 @@ static int pb_get(lua_State* L)
 		std::string str(reflection->GetString(*message, field));
 		lua_pushlstring(L, str.c_str(), str.length());
 	}
+    else if(field->type() == google::protobuf::FieldDescriptor::TYPE_ENUM)
+	{
+		lua_pushinteger(L, reflection->GetEnumValue(*message, field));
+	}
 	else if(field->type() == google::protobuf::FieldDescriptor::TYPE_MESSAGE)
 	{
     	Message* msg = reflection->MutableMessage(message, field);
@@ -469,6 +482,11 @@ static int pb_set(lua_State* L)
         int val = static_cast<int>(luaL_checkinteger(L, 3));
         reflection->SetBool(message, field, val);
     }
+    else if(field->type() == google::protobuf::FieldDescriptor::TYPE_ENUM)
+	{
+        int32_t val = static_cast<int32_t>(luaL_checkinteger(L, 3));
+        reflection->SetEnumValue(message, field, val);
+	}
     else
     {
     	luaL_argerror(L, 2, "pb_set field_name type error");

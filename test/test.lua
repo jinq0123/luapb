@@ -41,3 +41,5 @@ print("sz size is ".. #sz)
 
 local enum_value = pb.getEnumValue("Cmd.CMD_TYPE_USER")
 print(enum_value)
+
+print("cmd value is:" .. msg.cmd)

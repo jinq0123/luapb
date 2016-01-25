@@ -20,7 +20,7 @@ protected:
 public:
 	bool Import(const std::string& filename);
 	google::protobuf::Message* createDynamicMessage(const std::string& typeName);
-    int getEnumValue(const char * enumtype);
+    int getEnumValue(const char * enumtype, const char * enumfield);
 public:
 	google::protobuf::compiler::Importer importer;
 	google::protobuf::DynamicMessageFactory factory;

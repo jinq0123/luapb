@@ -1,0 +1,37 @@
+-- premake5.lua
+--[[
+Usage examples: 
+	for windows: premake5.exe --os=windows vs2015
+	fot linux:   premake5.exe --os=linux gmake
+]]
+
+protobuf_root = "E:/Git/protobuf"
+protobuf_lib_dir_debug = protobuf_root .. "/cmake/build/solution/Debug"
+protobuf_lib_dir_release = protobuf_root .. "/cmake/build/solution/Release"
+
+-- Todo: support non-vs2015, x64
+
+workspace "lubpb"
+project "luapb"
+	kind "SharedLib"
+	configurations { "Debug", "Release" }
+	language "C++"
+	files {
+		"../include/*.h",
+		"../src/*.cc",
+	}
+	includedirs {
+		"../include",
+		protobuf_root .. "/src",
+	}
+
+	filter "configurations:Debug"
+		flags { "Symbols" }
+		libdirs { protobuf_lib_dir_debug }
+		links { "libprotobufd" }
+	filter "configurations:Release"
+		defines { "NDEBUG" }
+		optimize "On"
+		libdirs { protobuf_lib_dir_release }
+		links { "libprotobuf" }
+-- End of project "luapb"

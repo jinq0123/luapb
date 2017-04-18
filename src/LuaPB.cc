@@ -1,6 +1,6 @@
 #include "LuaPB.h"
 #include "ProtoImporter.h"
-#include <lua.hpp>
+#include "LuaCompat.h"  // for lua.h
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/descriptor_database.h>
 #include <google/protobuf/message.h>

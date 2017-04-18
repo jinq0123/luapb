@@ -13,6 +13,8 @@ lua_include_dir = "E:/ThirdParty/lua-5.3.2/src"
 lua_lib_dir_debug = "E:/ThirdParty/lua-5.3.2/bin/Debug"
 lua_lib_dir_release = "E:/ThirdParty/lua-5.3.2/bin/Release"
 lua_lib_name = "liblua532"
+-- Set true if lua is complied in cxx.
+lua_complied_in_cxx = false
 
 -- Todo: support non-vs2015, x64
 
@@ -21,6 +23,9 @@ workspace "luapb"
 project "luapb"
 	kind "SharedLib"
 	language "C++"
+	if lua_complied_in_cxx then
+		defines { LUAPB_LINK_LUA_COMPILED_IN_CXX }
+	end  -- if
 	files {
 		"../include/*.h",
 		"../src/*.cc",

@@ -5,13 +5,18 @@ Usage examples:
 	fot linux:   premake5.exe --os=linux gmake
 ]]
 
+-- Change these:
 protobuf_root = "E:/Git/protobuf"
 protobuf_lib_dir_debug = protobuf_root .. "/cmake/build/solution/Debug"
 protobuf_lib_dir_release = protobuf_root .. "/cmake/build/solution/Release"
+lua_include_dir = "E:/ThirdParty/lua-5.3.2/src"
+lua_lib_dir_debug = "E:/ThirdParty/lua-5.3.2/bin/Debug"
+lua_lib_dir_release = "E:/ThirdParty/lua-5.3.2/bin/Release"
+lua_lib_name = "liblua532"
 
 -- Todo: support non-vs2015, x64
 
-workspace "lubpb"
+workspace "luapb"
 	configurations { "Debug", "Release" }
 project "luapb"
 	kind "SharedLib"
@@ -23,15 +28,23 @@ project "luapb"
 	includedirs {
 		"../include",
 		protobuf_root .. "/src",
+		lua_include_dir,
 	}
+	links { lua_lib_name }
 
 	filter "configurations:Debug"
 		flags { "Symbols" }
-		libdirs { protobuf_lib_dir_debug }
+		libdirs {
+			protobuf_lib_dir_debug,
+			lua_lib_dir_debug,
+		}
 		links { "libprotobufd" }
 	filter "configurations:Release"
 		defines { "NDEBUG" }
 		optimize "On"
-		libdirs { protobuf_lib_dir_release }
+		libdirs {
+			protobuf_lib_dir_release,
+			lua_lib_dir_release,
+		}
 		links { "libprotobuf" }
 -- End of project "luapb"

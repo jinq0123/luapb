@@ -14,3 +14,9 @@
 
 /build/premake5.exe
 /build/premake5.lua
+/build/copy_premake5_lua.bat
+/build/.vs
+/build/obj
+/build/bin
+/build/luapb.VC.db
+/build/luapb.VC.VC.opendb

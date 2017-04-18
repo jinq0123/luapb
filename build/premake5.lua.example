@@ -12,9 +12,9 @@ protobuf_lib_dir_release = protobuf_root .. "/cmake/build/solution/Release"
 -- Todo: support non-vs2015, x64
 
 workspace "lubpb"
+	configurations { "Debug", "Release" }
 project "luapb"
 	kind "SharedLib"
-	configurations { "Debug", "Release" }
 	language "C++"
 	files {
 		"../include/*.h",

@@ -13,3 +13,4 @@
 *.a
 
 /build/premake5.exe
+/build/premake5.lua

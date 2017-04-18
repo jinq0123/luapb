@@ -15,7 +15,7 @@ ifeq ($(config),debug)
   TARGETDIR = bin/Debug
   TARGET = $(TARGETDIR)/libluapb.so
   OBJDIR = obj/Debug
-  DEFINES +=
+  DEFINES += -DLUAPB_LINK_LUA_COMPILED_IN_CXX=1
   INCLUDES += -I../include -I../../../protobuf/src -IE:/ThirdParty/lua-5.3.2/src
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
@@ -42,7 +42,7 @@ ifeq ($(config),release)
   TARGETDIR = bin/Release
   TARGET = $(TARGETDIR)/libluapb.so
   OBJDIR = obj/Release
-  DEFINES += -DNDEBUG
+  DEFINES += -DLUAPB_LINK_LUA_COMPILED_IN_CXX=1 -DNDEBUG
   INCLUDES += -I../include -I../../../protobuf/src -IE:/ThirdParty/lua-5.3.2/src
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)

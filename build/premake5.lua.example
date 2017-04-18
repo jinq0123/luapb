@@ -24,10 +24,11 @@ project "luapb"
 	kind "SharedLib"
 	language "C++"
 	if lua_complied_in_cxx then
-		defines { LUAPB_LINK_LUA_COMPILED_IN_CXX }
+		defines { "LUAPB_LINK_LUA_COMPILED_IN_CXX=1" }
 	end  -- if
 	files {
 		"../include/*.h",
+		"../src/*.h",
 		"../src/*.cc",
 	}
 	includedirs {

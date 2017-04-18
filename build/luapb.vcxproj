@@ -57,6 +57,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>LUAPB_LINK_LUA_COMPILED_IN_CXX=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\include;..\..\..\protobuf\src;E:\ThirdParty\lua-5.3.2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -73,7 +74,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LUAPB_LINK_LUA_COMPILED_IN_CXX=1;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\include;..\..\..\protobuf\src;E:\ThirdParty\lua-5.3.2\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -94,6 +95,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\LuaPB.h" />
     <ClInclude Include="..\include\ProtoImporter.h" />
+    <ClInclude Include="..\src\LuaCompat.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\LuaPB.cc" />

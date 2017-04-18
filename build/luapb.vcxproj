@@ -94,7 +94,6 @@
   <ItemGroup>
     <ClInclude Include="..\include\LuaPB.h" />
     <ClInclude Include="..\include\ProtoImporter.h" />
-    <ClInclude Include="..\include\Singleton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\LuaPB.cc" />

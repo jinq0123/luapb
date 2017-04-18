@@ -15,9 +15,6 @@
     <ClInclude Include="..\include\ProtoImporter.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Singleton.h">
-      <Filter>include</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\LuaPB.cc">

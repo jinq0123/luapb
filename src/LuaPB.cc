@@ -1,7 +1,6 @@
-
 #include "LuaPB.h"
 #include "ProtoImporter.h"
-
+#include <lua.hpp>
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/descriptor_database.h>
 #include <google/protobuf/message.h>
@@ -79,17 +78,17 @@ static int pb_repeated_add(lua_State* L)
     }
     else if (field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
     {
-        long val = static_cast<long>(luaL_checknumber(L, 2));
+        int64_t val = static_cast<int64_t>(luaL_checkinteger(L, 2));
         reflection->AddInt64(message, field, val);
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_UINT32)
     {
-        unsigned int val = static_cast<unsigned int>(luaL_checknumber(L, 2));
+        unsigned int val = static_cast<unsigned int>(luaL_checkinteger(L, 2));
         reflection->AddUInt32(message, field, val);
     }
     else if (field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
     {
-        unsigned long val = static_cast<unsigned long>(luaL_checknumber(L, 2));
+        uint64_t val = static_cast<uint64_t>(luaL_checkinteger(L, 2));
         reflection->AddUInt64(message, field, val);
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_FLOAT)
@@ -200,6 +199,18 @@ static int pb_repeated_get(lua_State* L)
 		Message* msg = reflection->MutableRepeatedMessage(message, field, index);
 		return push_message(L, msg, false);
 	}
+    else if (field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
+    {
+		lua_pushinteger(L, reflection->GetRepeatedUInt64(*message, field, index));
+    }
+    else if (field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
+    {
+		lua_pushinteger(L, reflection->GetRepeatedInt64(*message, field, index));
+    }
+    else if(field->type() == google::protobuf::FieldDescriptor::TYPE_ENUM)
+	{
+		lua_pushinteger(L, reflection->GetRepeatedEnumValue(*message, field, index));
+	}
 	else
 	{
 		luaL_argerror(L, 0, "pb_repeated_get, field type for get not support!!!");
@@ -264,6 +275,21 @@ static int pb_repeated_set(lua_State* L)
 		const char *str = static_cast<const char *>(luaL_checklstring(L, 3, &strlen));
 		reflection->SetRepeatedString(message, field, index, str);
 	}
+    else if (field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
+    {
+        int64_t val = static_cast<int64_t>(luaL_checkinteger(L, 3));
+        reflection->SetRepeatedInt64(message, field, index, val);
+    }
+    else if (field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
+    {
+        uint64_t val = static_cast<uint64_t>(luaL_checkinteger(L, 3));
+        reflection->SetRepeatedUInt64(message, field, index, val);
+    }
+    else if(field->type() == google::protobuf::FieldDescriptor::TYPE_ENUM)
+	{
+        int32_t val = static_cast<int32_t>(luaL_checkinteger(L, 3));
+        reflection->SetRepeatedEnumValue(message, field, index, val);
+	}
 	else
 	{
 		luaL_argerror(L, (2), "pb_repeated_set type for set not support!!!");
@@ -275,14 +301,14 @@ static int pb_repeated_set(lua_State* L)
 static int pb_import(lua_State* L)
 {
 	const char* filename = luaL_checkstring(L, 1);
-	sProtoImporter.Import(filename);
+	ProtoImporter::instance().Import(filename);
 	return 0;
 }
 
 static int pb_new(lua_State* L)
 {
 	const char* type_name = luaL_checkstring(L, 1);
-	Message* message = sProtoImporter.createDynamicMessage(type_name);
+	Message* message = ProtoImporter::instance().createDynamicMessage(type_name);
 	if (!message)
 	{
 		fprintf(stderr, "pb_new error, result is typename(%s) not found!\n", type_name);
@@ -346,7 +372,7 @@ static int pb_get(lua_State* L)
 	}
     else if (field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
     {
-        lua_pushnumber(L, reflection->GetInt64(*message, field));
+        lua_pushinteger(L, reflection->GetInt64(*message, field));
     }
 	else if(field->type() == google::protobuf::FieldDescriptor::TYPE_UINT32)
 	{
@@ -354,7 +380,7 @@ static int pb_get(lua_State* L)
 	}
     else if (field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
     {
-        lua_pushnumber(L, reflection->GetUInt64(*message, field));
+        lua_pushinteger(L, reflection->GetUInt64(*message, field));
     }
 	else if(field->type() == google::protobuf::FieldDescriptor::TYPE_FLOAT)
 	{
@@ -377,6 +403,10 @@ static int pb_get(lua_State* L)
 	{
 		std::string str(reflection->GetString(*message, field));
 		lua_pushlstring(L, str.c_str(), str.length());
+	}
+    else if(field->type() == google::protobuf::FieldDescriptor::TYPE_ENUM)
+	{
+		lua_pushinteger(L, reflection->GetEnumValue(*message, field));
 	}
 	else if(field->type() == google::protobuf::FieldDescriptor::TYPE_MESSAGE)
 	{
@@ -424,7 +454,7 @@ static int pb_set(lua_State* L)
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_INT64)
     {
-        long val = static_cast<long>(luaL_checknumber(L, 3));
+        int64_t val = static_cast<int64_t>(luaL_checknumber(L, 3));
         reflection->SetInt64(message, field, val);
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_UINT32)
@@ -434,7 +464,7 @@ static int pb_set(lua_State* L)
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_UINT64)
     {
-        unsigned long val = static_cast<unsigned long>(luaL_checknumber(L, 3));
+        uint64_t val = static_cast<uint64_t>(luaL_checkinteger(L, 3));
         reflection->SetUInt64(message, field, val);
     }
     else if(field->type() == google::protobuf::FieldDescriptor::TYPE_FLOAT)
@@ -452,6 +482,11 @@ static int pb_set(lua_State* L)
         int val = static_cast<int>(luaL_checkinteger(L, 3));
         reflection->SetBool(message, field, val);
     }
+    else if(field->type() == google::protobuf::FieldDescriptor::TYPE_ENUM)
+	{
+        int32_t val = static_cast<int32_t>(luaL_checkinteger(L, 3));
+        reflection->SetEnumValue(message, field, val);
+	}
     else
     {
     	luaL_argerror(L, 2, "pb_set field_name type error");
@@ -483,49 +518,54 @@ static int pb_serializeToString(lua_State* L)
 	return 1;
 }
 
-static const struct luaL_reg lib[] =
+static int pb_getEnumValue(lua_State* L)
+{
+    const char * name = luaL_checkstring(L, 1);
+    const char * field = luaL_checkstring(L, 2);
+    int rc = ProtoImporter::instance().getEnumValue(name,field);
+    lua_pushinteger(L, rc);
+    return 1;
+}
+
+static const struct luaL_Reg lib[] =
 {
 	{"new", pb_new},
 	{"import", pb_import},
 	{"tostring", pb_tostring},
 	{"parseFromString", pb_parseFromString},
 	{"serializeToString", pb_serializeToString},
-	{NULL, NULL}
+    {"getEnumValue", pb_getEnumValue},
+	{NULL, NULL},
 };
 
-static const struct luaL_reg libm[] =
+static const struct luaL_Reg libm[] =
 {
 	{"__index", pb_get},
 	{"__newindex", pb_set},
 	{"__gc", pb_delete},
-	{NULL, NULL}
+	{NULL, NULL},
 };
 
-static const struct luaL_reg repeatedlib[] = {
+static const struct luaL_Reg repeatedlib[] = {
 	{"add", pb_repeated_add},
 	{"len", pb_repeated_len},
 	{"get", pb_repeated_get},
 	{"set", pb_repeated_set},
+    {"__newindex", pb_repeated_set},
 	{NULL, NULL},
 };
 
-int luaopen_luapb(lua_State* L)
+int luaopen_pb(lua_State* L)
 {
 	luaL_newmetatable(L, PB_REPEATED_MESSAGE_META); 
-	luaL_register(L, NULL, repeatedlib);
-
-	lua_pushstring(L, "__index");
-	lua_pushvalue(L, -2);
-	lua_settable(L, -3);
-
-	lua_pushstring(L, "__newindex");
-	lua_pushcfunction(L, pb_repeated_set);
-	lua_settable(L, -3);
+	lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+    luaL_setfuncs(L, repeatedlib, 0);
 
 	luaL_newmetatable(L, PB_MESSAGE_META);
-	luaL_register(L, NULL, libm);
+    luaL_setfuncs(L, libm, 0);
 
-	luaL_register(L, PB_MESSAGE, lib);
+    luaL_newlib(L, lib);
 	return 1;
 }
 

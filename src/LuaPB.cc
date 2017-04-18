@@ -555,7 +555,11 @@ static const struct luaL_Reg repeatedlib[] = {
 	{NULL, NULL},
 };
 
-int luaopen_pb(lua_State* L)
+extern "C"
+#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__CODEGEARC__)
+__declspec(dllexport)
+#endif
+int luaopen_luapb(lua_State* L)
 {
 	luaL_newmetatable(L, PB_REPEATED_MESSAGE_META); 
 	lua_pushvalue(L, -1);

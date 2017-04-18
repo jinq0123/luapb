@@ -3,7 +3,6 @@
 
 #include <google/protobuf/message.h>
 
-struct lua_State;
 typedef struct tagluamsg
 {
 	google::protobuf::Message* msg;
@@ -20,7 +19,5 @@ typedef struct tagluarepeatedmsg
 #define PB_MESSAGE_META "pb_meta"
 
 #define PB_REPEATED_MESSAGE_META "pb_repeated_meta"
-
-extern "C" int luaopen_pb(lua_State* L);
 
 #endif

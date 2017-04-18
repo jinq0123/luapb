@@ -1,3 +1,4 @@
+require("luapb");
 
 --package lm;
 --message test

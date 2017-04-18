@@ -16,15 +16,15 @@ ifeq ($(config),debug)
   TARGET = $(TARGETDIR)/libluapb.so
   OBJDIR = obj/Debug
   DEFINES += -DLUAPB_LINK_LUA_COMPILED_IN_CXX=1
-  INCLUDES += -I../include -I../../../protobuf/src -IE:/ThirdParty/lua-5.3.2/src
+  INCLUDES += -I../include -I../../../protobuf/src -IE:/gianttech/server_deps_oschina/include/lua532
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -fPIC
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lliblua532 -llibprotobufd
+  LIBS += -llua53 -llibprotobufd
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L../../../protobuf/cmake/build/solution/Debug -LE:/ThirdParty/lua-5.3.2/bin/Debug -shared
+  ALL_LDFLAGS += $(LDFLAGS) -L../../../protobuf/cmake/build/solution/Debug -LE:/gianttech/server_deps_lib_win/Debug -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -43,15 +43,15 @@ ifeq ($(config),release)
   TARGET = $(TARGETDIR)/libluapb.so
   OBJDIR = obj/Release
   DEFINES += -DLUAPB_LINK_LUA_COMPILED_IN_CXX=1 -DNDEBUG
-  INCLUDES += -I../include -I../../../protobuf/src -IE:/ThirdParty/lua-5.3.2/src
+  INCLUDES += -I../include -I../../../protobuf/src -IE:/gianttech/server_deps_oschina/include/lua532
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2 -fPIC
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lliblua532 -llibprotobuf
+  LIBS += -llua53 -llibprotobuf
   LDDEPS +=
-  ALL_LDFLAGS += $(LDFLAGS) -L../../../protobuf/cmake/build/solution/Release -LE:/ThirdParty/lua-5.3.2/bin/Release -s -shared
+  ALL_LDFLAGS += $(LDFLAGS) -L../../../protobuf/cmake/build/solution/Release -LE:/gianttech/server_deps_lib_win/Release -s -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef

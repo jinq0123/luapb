@@ -3,7 +3,7 @@
 1. Copy premake5.lua.example to premake5.lua.
 	* See copy_premake5_lua.bat
 2. Edit premake5.lua, change:
-	* protobuf_root
+	* protobuf_include_dir
 	* protobuf_lib_dir_debug
 	* protobuf_lib_dir_release
 	* lua_include_dir

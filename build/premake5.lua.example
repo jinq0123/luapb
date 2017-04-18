@@ -6,13 +6,13 @@ Usage examples:
 ]]
 
 -- Change these:
-protobuf_root = "E:/Git/protobuf"
-protobuf_lib_dir_debug = protobuf_root .. "/cmake/build/solution/Debug"
-protobuf_lib_dir_release = protobuf_root .. "/cmake/build/solution/Release"
-lua_include_dir = "E:/ThirdParty/lua-5.3.2/src"
-lua_lib_dir_debug = "E:/ThirdParty/lua-5.3.2/bin/Debug"
-lua_lib_dir_release = "E:/ThirdParty/lua-5.3.2/bin/Release"
-lua_lib_name = "liblua532"
+protobuf_include_dir = "E:/Git/protobuf/src"
+protobuf_lib_dir_debug = "E:/Git/protobuf/cmake/build/solution/Debug"
+protobuf_lib_dir_release = "E:/Git/protobuf/cmake/build/solution/Release"
+lua_include_dir = "E:/gianttech/server_deps_oschina/include/lua532"
+lua_lib_dir_debug = "E:/gianttech/server_deps_lib_win/Debug"
+lua_lib_dir_release = "E:/gianttech/server_deps_lib_win/Release"
+lua_lib_name = "lua532"
 -- Set true if lua is complied in cxx.
 lua_complied_in_cxx = false
 
@@ -23,6 +23,9 @@ workspace "luapb"
 project "luapb"
 	kind "SharedLib"
 	language "C++"
+	flags {
+		"StaticRuntime",  -- for protobuf
+	}
 	if lua_complied_in_cxx then
 		defines { "LUAPB_LINK_LUA_COMPILED_IN_CXX=1" }
 	end  -- if
@@ -33,7 +36,7 @@ project "luapb"
 	}
 	includedirs {
 		"../include",
-		protobuf_root .. "/src",
+		protobuf_include_dir,
 		lua_include_dir,
 	}
 	links { lua_lib_name }

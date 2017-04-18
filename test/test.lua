@@ -1,4 +1,4 @@
-require("luapb");
+local pb = require("luapb");
 
 --package lm;
 --message test

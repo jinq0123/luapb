@@ -22,3 +22,4 @@
 /build/luapb.VC.VC.opendb
 /test/*.dll
 /test/*.exe
+/build/luapb.sdf

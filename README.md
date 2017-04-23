@@ -3,6 +3,8 @@ luapb
 
 This is a binding of Google Protocol Buffer to Lua 
 
+[LuaPbIntf](https://github.com/jinq0123/LuaPbIntf) is a better choice than luapb.
+
 ## Example
 
 ```
